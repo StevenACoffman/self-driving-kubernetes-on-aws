@@ -1,6 +1,6 @@
 # Self-Driving Infrastructure using Kubernetes on AWS with EKS
 
-This workshop will provide hands on experience on setting up and running an AWS Kubernetes cluster using EKS. We will use gitops, and explore kubernetes tools to make the cluster self-driving, with automated management and remedy of common cluster level problems. To achieve this, we will use eksctl, cluster-autoscaler, kube-prometheus (prometheus operator), node-problem-detector, draino, and node-local-dns-cache.
+This workshop will provide hands on experience on setting up and running an AWS Kubernetes cluster using EKS. We will use gitops, and explore kubernetes tools to make the cluster self-driving, with automated management and remedy of common cluster level problems. To achieve this, we will use eksctl, cluster-autoscaler, kube-prometheus (prometheus operator), node-problem-detector, and draino. For further exploration, please check out the [AWS EKS Workshop](https://eksworkshop.com).
 
 
 ## Exercise 1: Write your own microservice in one line that provides:
@@ -9,7 +9,7 @@ This workshop will provide hands on experience on setting up and running an AWS 
 - [ ] Security + Policy
 - [ ] Service discovery
 - [ ] Observabilitiy: Metrics, Tracing, Logs, Alerts
-- [ ] Traffic Management 
+- [ ] Traffic Management
 - [ ] Retries
 - [ ] Timeouts
 - [ ] Load balancing
@@ -22,7 +22,7 @@ This workshop will provide hands on experience on setting up and running an AWS 
 
 You either need a rich execution environment allow your microservice to laser focus on business value, or you need to add so much overhead to your microservice that it winds up not very micro.  
 
-If you can build a straightforward monolithic app and never think about all this asynchronous stuff, go for it! If your system is big enough that you need to refactor into microservices for sanity’s sake, or you need to scale components independently to manage load, or you need to make temporary outages survivable, then microservices with a rich execution environment are a great way to go. 
+If you can build a straightforward monolithic app and never think about all this asynchronous stuff, go for it! If your system is big enough that you need to refactor into microservices for sanity’s sake, or you need to scale components independently to manage load, or you need to make temporary outages survivable, then microservices with a rich execution environment are a great way to go.
 
 ## Ok, Fine. Microservices. But Kubernetes on AWS?
 
@@ -32,7 +32,7 @@ There are many disparate technical solutions for managing each of the concerns o
 
 As Paul Ingles said, one of Kubernetes’ greatest strengths is providing a ubiquitous language that connects applications teams and infrastructure teams. And, because it’s extensible, this can grow beyond the core concepts to more domain and business specific concepts.
 
-We also found Kubernetes attractive because it allowed us to iterate quickly for a proof of concept, while giving us built-in resilience and an easy path to scale it in production. 
+We also found Kubernetes attractive because it allowed us to iterate quickly for a proof of concept, while giving us built-in resilience and an easy path to scale it in production.
 
 Kubernetes extensible nature, first class support for healthchecks, detailed metrics, and automated recovery for applications make it very simple to automate maintenance and recovery of the Kubernetes platform and it's components.
 
@@ -49,7 +49,7 @@ This workshop is intended to appeal primarily to four types of people:
 1. Application developers looking to get an AWS kubernetes cluster to experiment without a lot of infrastructure knowledge
 2. AWS DevOps people without a lot of kubernetes experience
 3. Kubernetes DevOps people without a lot of AWS experience
-4. Full-stack, [Full-cycle](https://medium.com/netflix-techblog/full-cycle-developers-at-netflix-a08c31f83249) developers in small or large teams. 
+4. Full-stack, [Full-cycle](https://medium.com/netflix-techblog/full-cycle-developers-at-netflix-a08c31f83249) developers in small or large teams.
 
 ## Prerequisites
 1. [An AWS Account ($25 credit code will be given on day of the workshop)](#create-aws-account)
@@ -83,7 +83,7 @@ and Windows users can use [chocolatey](https://chocolatey.org):
 chocolatey install awscli
 ```
 
-If you already have pip and a supported version of Python, and [ideally you know how to set up a virtual environment](https://docs.aws.amazon.com/cli/latest/userguide/install-virtualenv.html). You can install the AWS CLI by using the following command. If you have Python version 3+ installed, we recommend that you use the pip3 command. 
+If you already have pip and a supported version of Python, and [ideally you know how to set up a virtual environment](https://docs.aws.amazon.com/cli/latest/userguide/install-virtualenv.html). You can install the AWS CLI by using the following command. If you have Python version 3+ installed, we recommend that you use the pip3 command.
 ```
 pip3 install awscli --upgrade --user
 ```
@@ -188,21 +188,37 @@ Fortunately, both the Kubernetes Ecosystem and that of AWS are vast and dynamic,
 
 ### `eksctl` - a CLI for Amazon EKS
 
-While it started as a simple CLI for EKS, it's clear ambition is to serve both developer use-cases and operational best practices like GitOps. At present, it already does a pretty good job of both.
+While [eksctl](https://github.com/weaveworks/eksctl) started as a simple CLI for EKS, it's clear ambition is to serve both developer use-cases and operational best practices like GitOps. At present, it already does a pretty good job of both.
 
 GitOps takes full advantage of the move towards immutable infrastructure and declarative container orchestration. In order to minimize the risk of change after a deployment, whether intended or by accident via "configuration drift" it is essential that we maintain a reproducible and reliable deployment process.   
 
-Our whole system’s desired state (aka "the source of truth") is described in Git. We use containers for immutability as well as different cloud native tools like Cloudformation and Terraform to automate and manage our configuration. These tools together with containers and declarative nature of Kubernetes provide what we need for a complete recovery in the case of an entire meltdown.
+Our whole system’s desired state (aka "the source of truth") is described in Git. We use containers for immutability as well as different cloud native tools like Cloudformation to automate and manage our configuration. These tools together with containers and declarative nature of Kubernetes provide what we need for a complete recovery in the case of an entire meltdown.
 
 Meanwhile, Developers want a quick and easy way to spin up a flexible, friendly, and frictionless continuous delivery pipeline so they can focus on delivering business value (or just doing cool stuff) without getting bogged down in yak-shaving (i.e. details, details).
 
 The `eksctl` tool lets us spin up and manage a fully operational cluster with sensible defaults and a broad array of addons and configuration settings. You can choose to pass it flags on the cli (dev mode), or specify detailed configuration via yaml, and checked into git (ops mode). As it improves, it continues to better meet the use cases of both audiences.
 
+### What is an operator?
+
+From the [operator documentation](https://coreos.com/operators/):
+> An Operator is an application-specific controller that extends the Kubernetes API to create, configure and manage instances of complex stateful applications on behalf of a Kubernetes user. It builds upon the basic Kubernetes resource and controller concepts, but also includes domain or application-specific knowledge to automate common tasks better managed by computers.
+
+From Kubernetes official documentation, [Kube-controller-manager](https://kubernetes.io/docs/admin/kube-controller-manager/)
+> In applications of robotics and automation, a control loop is a non-terminating loop that regulates the state of the system. In Kubernetes, a controller is a control loop that watches the shared state of the cluster through the API server and makes changes attempting to move the current state towards the desired state. Examples of controllers that ship with Kubernetes today are the replication controller, endpoints controller, namespace controller, and serviceaccounts controller.
+
+An operator is a combination of custom resource types and the controllers that take care of the reconciliation process.
+
+This extensible pattern allows us to collaborate on fully automating all the operation and system administration of even very complex systems. For a list of open source operators and an evaluation of how production ready they are see [Kubernetes Operators](https://kubedex.com/operators/) and the [awesome operators](https://github.com/operator-framework/awesome-operators).
+
 ### horizontal pod autoscaling with kube-prometheus (prometheus operator)
 
-The kube-prometheus stack is meant for cluster monitoring, so it is pre-configured to collect metrics from all Kubernetes components. The kube-prometheus stack includes a resource metrics API server for horizontal pod autoscaling, like the metrics-server does. In addition to that it delivers a default set of dashboards and alerting rules. 
+The [Prometheus Operator](https://github.com/coreos/prometheus-operator) makes the Prometheus configuration Kubernetes native and manages and operates Prometheus and Alertmanager clusters. It is a piece of the puzzle regarding full end-to-end monitoring.
 
-It provides Kubernetes manifests, Grafana dashboards, and Prometheus rules combined with documentation and scripts to provide easy to operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus Operator. 
+[kube-prometheus](https://github.com/coreos/kube-prometheus) combines the Prometheus Operator with a collection of manifests to help getting started with monitoring Kubernetes itself and applications running on top of it.
+
+The [kube-prometheus](https://github.com/coreos/kube-prometheus) stack is meant for cluster monitoring, so it is pre-configured to collect metrics from all Kubernetes components. The kube-prometheus stack includes a resource metrics API server for horizontal pod autoscaling, like the metrics-server does. In addition to that it delivers a default set of dashboards and alerting rules.
+
+It provides Kubernetes manifests, Grafana dashboards, and Prometheus rules combined with documentation and scripts to provide easy to operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus Operator.
 
 It includes:
 
@@ -215,7 +231,38 @@ It includes:
 * [Grafana](https://grafana.com/)
 
 
-### node-problem-detector and draino with the cluster autoscaler 
+##### Access the dashboards
+
+Prometheus, Grafana, and Alertmanager dashboards can be accessed quickly using `kubectl port-forward` after running the quickstart via the commands below. Kubernetes 1.10 or later is required.
+
+> Note: There are instructions on how to route to these pods behind an ingress controller in the [Exposing Prometheus/Alermanager/Grafana via Ingress](#exposing-prometheusalermanagergrafana-via-ingress) section.
+
+Prometheus
+
+```shell
+$ kubectl --namespace monitoring port-forward svc/prometheus-k8s 9090
+```
+
+Then access via [http://localhost:9090](http://localhost:9090)
+
+Grafana
+
+```shell
+$ kubectl --namespace monitoring port-forward svc/grafana 3000
+```
+
+Then access via [http://localhost:3000](http://localhost:3000) and use the default grafana user:password of `admin:admin`.
+
+Alert Manager
+
+```shell
+$ kubectl --namespace monitoring port-forward svc/alertmanager-main 9093
+```
+
+Then access via [http://localhost:9093](http://localhost:9093)
+
+
+### node-problem-detector and draino with the cluster autoscaler
 
 [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler/) is a standalone program that adjusts the size of a Kubernetes cluster to meet the current needs.
 
@@ -227,23 +274,19 @@ node such as:
 * Container runtime issues: Unresponsive runtime daemon;
 
 If problems are invisible to the upstream layers in cluster management
-stack, Kubernetes will continue scheduling pods to the bad nodes. The daemonset **[Node Problem Detector](https://github.com/kubernetes/node-problem-detector)** 
+stack, Kubernetes will continue scheduling pods to the bad nodes. The daemonset **[Node Problem Detector](https://github.com/kubernetes/node-problem-detector)**
 collects node problems from various daemons and make them visible to the upstream
 layers. It is running as a Kubernetes Addon enabled by default in GCE clusters, but we need to manually install it in EKS.
 
-[Draino](https://github.com/planetlabs/draino/) is intended for use alongside the Kubernetes [Node Problem Detector](https://github.com/kubernetes/node-problem-detector) and [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler/). The Node Problem Detector can set a node condition when it detects something wrong with a node - for instance by watching node logs or running a script. The Cluster Autoscaler can be configured to delete nodes that are underutilised. Adding Draino to the mix enables autoremediation:
+[Draino](https://github.com/planetlabs/draino/) is intended for use alongside the Kubernetes [Node Problem Detector](https://github.com/kubernetes/node-problem-detector) and [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler/). The Node Problem Detector can set a node condition when it detects something wrong with a node - for instance by watching node logs or running a script. The Cluster Autoscaler can be configured to delete nodes that are underutilized. Adding Draino to the mix enables auto-remediation:
 
 + The Node Problem Detector detects a permanent node problem and sets the corresponding node condition.
 + Draino notices the node condition. It immediately cordons the node to prevent new pods being scheduled there, and schedules a drain of the node.
-+ Once the node has been drained the Cluster Autoscaler will consider it underutilised. It will be eligible for scale down (i.e. termination) by the Autoscaler after a configurable period of time.
++ Once the node has been drained the Cluster Autoscaler will consider it underutilized. It will be eligible for scale down (i.e. termination) by the Autoscaler after a configurable period of time.
+
+Recently, Draino acquired the ability to support all node condition values and status durations for conditions. This allows us to specify `Ready=Unknown,10m` so that nodes that have lost contact with the control plane for prolonged periods can be assumed to have met unrecoverable conditions. Caution should be exercised when deciding how sensitive to make this reaction.
 
 
-### What is an operator?
+### Cleanup and Notes
 
-From the [operator documentation](https://coreos.com/operators/):
-> An Operator is an application-specific controller that extends the Kubernetes API to create, configure and manage instances of complex stateful applications on behalf of a Kubernetes user. It builds upon the basic Kubernetes resource and controller concepts, but also includes domain or application-specific knowledge to automate common tasks better managed by computers.
-
-From Kubernetes official documentation, [Kube-controller-manager](https://kubernetes.io/docs/admin/kube-controller-manager/)
-> In applications of robotics and automation, a control loop is a non-terminating loop that regulates the state of the system. In Kubernetes, a controller is a control loop that watches the shared state of the cluster through the API server and makes changes attempting to move the current state towards the desired state. Examples of controllers that ship with Kubernetes today are the replication controller, endpoints controller, namespace controller, and serviceaccounts controller.
-
-An operator is a combination of custom resource types and the controllers that take care of the reconciliation process.
+Make sure to list any clusters you made `eksctl get cluster --region=us-east-1` and to delete them: `eksctl delete cluster --region=us-east-1 --name=${CLUSTER_NAME}`. Then go in to your AWS console and insure that there's no lingering stacks in cloudformation, and nat gateways.
