@@ -8,4 +8,4 @@ export KUBECONFIG="$HOME/.kube/eksctl/clusters/${CLUSTER_NAME}.yaml"
 
 export ASDF_KUBECTL_VERSION=1.12.7
 eksctl utils write-kubeconfig --name=${CLUSTER_NAME}
-eksctl delete cluster --region=${AWS_REGION} --name=${CLUSTER_NAME}"
+eksctl delete cluster --region=${AWS_REGION} --name=${CLUSTER_NAME}
