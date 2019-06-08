@@ -43,7 +43,7 @@ eksctl create cluster --region=${AWS_REGION} --zones=us-east-1a,us-east-1b,us-ea
 
 CLUSTER_NAME="$(eksctl get cluster --region=$AWS_REGION | sed -n 2p | awk '{print $1}')"
 
-AWS_PATH="/usr/local/bin"
+AWS_PATH="$(dirname $(which aws))"
 AWS_BIN="${AWS_PATH}/aws"
 AWS_ACCOUNT_ID="$(${AWS_BIN} sts get-caller-identity --output text --query 'Account')"
 
