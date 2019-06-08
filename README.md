@@ -16,7 +16,7 @@ This workshop will provide hands on experience on setting up and running an AWS 
 - [ ] Rate limiting
 - [ ] Bulkheading
 - [ ] Circuit breaking
-- [ ] Actually useful business purpose �those things were for!
+- [ ] Actually useful business purpose :point_up_2: those things were for!
 
 *Hint:* Kubernetes and Istio (or Linkerd) Service Mesh
 
