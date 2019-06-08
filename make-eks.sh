@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -e
 
 # comment or alter next line to use different region
 AWS_DEFAULT_REGION="us-east-1"

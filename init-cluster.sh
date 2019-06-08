@@ -1,4 +1,6 @@
-#!/usr/bin/env bash -ex
+#!/usr/bin/env bash
+
+set -e
 
 AWS_DEFAULT_REGION="us-east-1"
 AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-${AWS_REGION:-"us-east-1"}}
