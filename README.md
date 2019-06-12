@@ -37,7 +37,7 @@ This workshop will provide hands on experience on setting up and running an AWS 
 - [ ] Circuit breaking
 - [ ] Actually useful business purpose :point_up_2: those things were for!
 
-<table><tr><td>:bulb: <b>Hint:</b> Kubernetes and Istio (or Linkerd2) Service Mesh together provide all but the very last one.</td></tr></table>
+<table><tr><td>:bulb: <b>Hint:</b> Kubernetes and a Service Mesh (Istio or Linkerd2) Service Mesh together provide all but the very last one.</td></tr></table>
 
 You either need a rich execution environment allow your microservice to laser focus on business value, or you need to add so much overhead to your microservice that it winds up not very micro.  
 
