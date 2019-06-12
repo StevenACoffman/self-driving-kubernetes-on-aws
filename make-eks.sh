@@ -45,7 +45,7 @@ eksctl create cluster --region=${AWS_REGION} --zones=us-east-1a,us-east-1b,us-ea
 CLUSTER_NAME="$(eksctl get cluster --region=$AWS_REGION | sed -n 2p | awk '{print $1}')"
 
 # Customize path if you have a pesky virtualenvironment or wrapper causing problems
-AWS_BIN="aws"
+AWS_BIN="${AWS_BIN:-aws}"
 AWS_ACCOUNT_ID="$(${AWS_BIN} sts get-caller-identity --output text --query 'Account')"
 
 echo "eksctl config file written to $HOME/.kube/eksctl/clusters/${CLUSTER_NAME} so:"
