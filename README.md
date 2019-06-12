@@ -350,6 +350,7 @@ A __PersistentVolume__ (PV) is a piece of storage in the cluster that has been p
 
 For further exploration, please check out the [AWS EKS Workshop](https://eksworkshop.com).
 
+Catalogs of Existing Operators:
 - [Kubdex Operators](https://kubedex.com/operators/)
 - [operatorhub](https://operatorhub.io/),
 - [Awesome Operators](https://github.com/operator-framework/awesome-operators)
