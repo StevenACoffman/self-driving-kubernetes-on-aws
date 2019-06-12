@@ -78,7 +78,7 @@ This workshop is intended to appeal primarily to four types of people:
 ### <a name="create-aws-account">Create AWS Account</a>
 This workshop expects you to [create your own AWS account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/), but participants will be given a $25 cost code to cover any costs incurred during the workshop. A pre-existing VPC is not required. Participants should create their accounts ASAP.  A small percentage of account may be pulled into a manual verification workflow.  Also if any users have accounts that have been deactivated for non-payment it will take some time for them to reactive once a credit card is added.
 
-<table><tr><td>:bulb: Tip: Your account must have the ability to create new IAM roles and scope other IAM permissions.</td></tr></table>
+<table><tr><td>:bulb: <b>Tip:</b> Your account must have the ability to create new IAM roles and scope other IAM permissions.</td></tr></table>
 
 1. If you don't already have an AWS account with Administrator access: [create
 one now by clicking here](https://portal.aws.amazon.com/billing/signup#/start)
@@ -86,7 +86,7 @@ one now by clicking here](https://portal.aws.amazon.com/billing/signup#/start)
 2. [Create a billing alarm](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/monitor_estimated_charges_with_cloudwatch.html) - Super important!
 
 ### <a name="install-aws-cli">Install the AWS CLI</a>
-<table><tr><td>:bulb: Tip: After you have the AWS CLI installed (as below), You will need to have AWS API credentials configured. You can use <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html"><code>~/.aws/credentials</code> file</a>
+<table><tr><td>:bulb: <b>Tip:</b> After you have the AWS CLI installed (as below), You will need to have AWS API credentials configured. You can use <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html"><code>~/.aws/credentials</code> file</a>
 or <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-environment.html">environment variables</a>. For more information read <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-environment.html">AWS documentation</a>. </td></tr></table>
 
 MacOS users can use [Homebrew](https://brew.sh):
@@ -151,7 +151,7 @@ chocolatey install eksctl
 ```
 ### <a name="install-docker">Install Docker</a>
 #### MacOS:
-> :bulb: Tip: Avoid _Docker Toolbox_ and _boot2docker_. These are older packages that have been ceded by _Docker for Mac_.
+> :bulb: <b>Tip:</b> Avoid _Docker Toolbox_ and _boot2docker_. These are older packages that have been ceded by _Docker for Mac_.
 ```
 brew cask install docker       # Install Docker
 open /Applications/Docker.app  # Start Docker
@@ -169,13 +169,13 @@ sudo apt install docker-compose
 sudo systemctl start docker
 ```
 
-<table><tr><td> :bulb: Tip: If the `docker.io` package isn't available for you, see [Get Docker CE for Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/) for an alternative.</td></tr></table>
+<table><tr><td> :bulb: <b>Tip:</b> If the `docker.io` package isn't available for you, see [Get Docker CE for Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/) for an alternative.</td></tr></table>
 
 #### Windows
 
 Install [Windows Subsystem for Linux][wsl] and choose _Ubuntu_ as your guest OS. Install Docker as you normally would on Ubuntu (see above). After that, [see these instructions](https://github.com/Microsoft/WSL/issues/2291#issuecomment-383698720) for info on how to get it running.
 
-<table><tr><td> :bulb: Tip: Avoid _Docker for Windows_. While it works in most cases, you'll still face NTFS limitations without WSL (eg, lack of symlinks, which is needed for Yarn/npm to work). </td></tr></table>
+<table><tr><td> :bulb: <b>Tip:</b> Avoid _Docker for Windows_. While it works in most cases, you'll still face NTFS limitations without WSL (eg, lack of symlinks, which is needed for Yarn/npm to work). </td></tr></table>
 
 [wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
 
