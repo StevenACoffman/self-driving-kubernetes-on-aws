@@ -18,8 +18,8 @@ This workshop will provide hands on experience on setting up and running an AWS 
   - [Horizontal Pod Autoscaling with kube-prometheus (prometheus operator)](#hpa)
     - [Access the dashboards](#access-dashboards)
   - [node-problem-detector and draino with the cluster autoscaler](#draino)
-  - [Let It Happen, Cap'n!](#let-it-happen-capn)
-  - [Clean Up](#cleanup)
+- [Let It Happen, Cap'n!](#let-it-happen-capn)
+- [Clean Up](#cleanup)
 - [Kubernetes Concepts Reference](#kubernetes-concepts)
 
 ## <a name="your-microservice">Exercise 1: Write your own microservice in one line that provides</a>:
@@ -304,20 +304,20 @@ layers. It is running as a Kubernetes Addon enabled by default in GCE clusters, 
 
 Recently, Draino acquired the ability to support all node condition values and status durations for conditions. This allows us to specify `Ready=Unknown,10m` so that nodes that have lost contact with the control plane for prolonged periods can be assumed to have met unrecoverable conditions. Caution should be exercised when deciding how sensitive to make this reaction.
 
-### <a name="let-it-happen-capn">Let it Happen, Cap'n!</a>
+## <a name="let-it-happen-capn">Let it Happen, Cap'n!</a>
 In this repository, there is a script `make-eks.sh` that should set up a functional AWS cluster.
 
 <table><tr><td>:bulb: <b>NOTE:</b> In us-east-1 you are likely to get <code>UnsupportedAvailabilityZoneException</code>. If you do, copy the suggested zones and pass <code>--zones</code> flag, e.g. <code>eksctl create cluster --region=us-east-1 --zones=us-east-1a,us-east-1b,us-east-1d</code>. This may occur in other regions, but less likely. You shouldn't need to use <code>--zone</code> flag otherwise.</td></tr></table>
 
-After that is done, you can run the 'init-cluster.sh' script to set up kube-prometheus, draino and all the other stuff mentioned.
+After that is done, you can run the `init-cluster.sh` script to set up kube-prometheus, draino and all the other stuff mentioned mentioned above.
 
-### <a name="cleanup">Cleanup and Notes</a>
+## <a name="cleanup">Cleanup and Notes</a>
 
 Make sure to list any clusters you made `eksctl get cluster --region=us-east-1` and to delete them: `eksctl delete cluster --region=us-east-1 --name=${CLUSTER_NAME}`. Then go in to your AWS console and ensure that there's no lingering stacks in CloudFormation, and NAT gateways.
 
 You can also run `cleanup.sh` to do this for you.
 
-### <a name="kubernetes-concepts">Kubernetes Concepts</a>
+## <a name="kubernetes-concepts">Kubernetes Concepts</a>
 
 Under the hood, Kubernetes uses iptables, DNS, and linux kernel namespaces and cgroups (docker containers) to orchestrate containers distributed across one or more physical host machines.
 
