@@ -307,7 +307,7 @@ Recently, Draino acquired the ability to support all node condition values and s
 ### <a name="let-it-happen-capn">Let it Happen, Cap'n!</a>
 In this repository, there is a script `make-eks.sh` that should set up a functional AWS cluster.
 
-<table><tr><td>:bulb: <b>NOTE:</b> In us-east-1 you are likely to get `UnsupportedAvailabilityZoneException`. If you do, copy the suggested zones and pass `--zones` flag, e.g. `eksctl create cluster --region=us-east-1 --zones=us-east-1a,us-east-1b,us-east-1d`. This may occur in other regions, but less likely. You shouldn't need to use `--zone` flag otherwise.</td></tr></table>
+<table><tr><td>:bulb: <b>NOTE:</b> In us-east-1 you are likely to get <code>UnsupportedAvailabilityZoneException</code>. If you do, copy the suggested zones and pass <code>--zones</code> flag, e.g. <code>eksctl create cluster --region=us-east-1 --zones=us-east-1a,us-east-1b,us-east-1d</code>. This may occur in other regions, but less likely. You shouldn't need to use <code>--zone</code> flag otherwise.</td></tr></table>
 
 After that is done, you can run the 'init-cluster.sh' script to set up kube-prometheus, draino and all the other stuff mentioned.
 
