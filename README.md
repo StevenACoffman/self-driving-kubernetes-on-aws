@@ -37,7 +37,7 @@ This workshop will provide hands on experience on setting up and running an AWS 
 - [ ] Circuit breaking
 - [ ] Actually useful business purpose :point_up_2: those things were for!
 
-*Hint:* Kubernetes and Istio (or Linkerd) Service Mesh
+<table><tr><td>:bulb: <b>Hint:</b> Kubernetes and Istio (or Linkerd2) Service Mesh together provide all but the very last one.</td></tr></table>
 
 You either need a rich execution environment allow your microservice to laser focus on business value, or you need to add so much overhead to your microservice that it winds up not very micro.  
 
@@ -345,3 +345,7 @@ A __Volume__ is just a directory, possibly with some data in it, which is access
 
 #### PersistentVolume
 A __PersistentVolume__ (PV) is a piece of storage in the cluster that has been provisioned by an administrator. It is a resource in the cluster just like a node is a cluster resource. PVs have a lifecycle independent of any individual Pod that uses the PV.
+
+## Recommended Further exploration
+
+For further exploration, please check out the [AWS EKS Workshop](https://eksworkshop.com).
