@@ -2,8 +2,27 @@
 
 This workshop will provide hands on experience on setting up and running an AWS Kubernetes cluster using EKS. We will use gitops, and explore kubernetes tools to make the cluster self-driving, with automated management and remedy of common cluster level problems. To achieve this, we will use eksctl, cluster-autoscaler, kube-prometheus (prometheus operator), node-problem-detector, and draino. For further exploration, please check out the [AWS EKS Workshop](https://eksworkshop.com).
 
+- [Excerise 1: Enrich Your Microservice](#your-microservice)
+- [Kubernetes on AWS](#kubernetes-on-aws)
+- [Intended Audience](#intended-audience)
+- [Prerequisites](#prerequisities)
+  - [Create AWS Account](#create-aws-account)
+  - [Install AWS CLI](#install-aws-cli)
+  - [Install kubectl](#install-kubectl)
+  - [Install AWS IAM Authenticator](#install-aws-iam-authenticator)
+  - [Install eksctl](#install-eksctl)
+  - [Install Docker](#install-docker) (optional)
+- [How to make Kubernetes Self-Driving](#self-driving-kubernetes)
+  - [Using eksctl](#eksctl)
+  - [What is an Operator?](#what-is-an-operator)
+  - [Horizontal Pod Autoscaling with kube-prometheus (prometheus operator)](#hpa)
+    - [Access the dashboards](#access-dashboards)
+  - [node-problem-detector and draino with the cluster autoscaler](#draino)
+  - [Let It Happen, Cap'n!](#let-it-happen-capn)
+  - [Clean Up](#cleanup)
+- [Kubernetes Concepts Reference](#kubernetes-concepts)
 
-## Exercise 1: Write your own microservice in one line that provides:
+## <a name="your-microservice">Exercise 1: Write your own microservice in one line that provides</a>:
 - [ ] High Availability with Health Checks and Automated Recovery
 - [ ] Scalability: Automatic horizontal and vertical scaling
 - [ ] Security + Policy
@@ -24,7 +43,7 @@ You either need a rich execution environment allow your microservice to laser fo
 
 If you can build a straightforward monolithic app and never think about all this asynchronous stuff, go for it! If your system is big enough that you need to refactor into microservices for sanity’s sake, or you need to scale components independently to manage load, or you need to make temporary outages survivable, then microservices with a rich execution environment are a great way to go.
 
-## Ok, Fine. Microservices. But Kubernetes on AWS?
+## <a name="kubernetes-on-aws">Ok, Fine. Microservices. But Kubernetes on AWS?</a>
 
 Many of the most powerful architectures involve combining diverse workloads like a stateless web application with a persistent, stateful database, along with periodically running to completion a finite task. Even if these pieces are packed in containers, they still need to be coordinated. We need to deploy, manage, and scale the disparate pieces in different ways.  We also wish to span some pieces over many servers while looking like one single unit to other pieces. On top of this, managing persistent storage is a distinct problem from managing other computational resources.
 
@@ -38,20 +57,17 @@ Kubernetes extensible nature, first class support for healthchecks, detailed met
 
 This workshop will provide hands on experience on running an AWS Kubernetes cluster using EKS. We will use gitops, and explore kubernetes tools to make the cluster self-driving, with automated management and remedy of cluster level problems. To achieve this, we will use eksctl, cluster-autoscaler, external-dns, kube-prometheus (prometheus operator), node-problem-detector, draino, node-local-dns-cache, and dashboard.
 
-While we won't focus on it, we will provide a continuous delivery pipeline on top of kubernetes.
-
 Also [Why do I need kubernetes and what can it do](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/#why-do-i-need-kubernetes-and-what-can-it-do) and ([see why containers](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/#why-containers))
 
-
-## Intended audience
+## <a name="intended-audience">Intended audience</a>
 This workshop is intended to appeal primarily to four types of people:
 
-1. Application developers looking to get an AWS kubernetes cluster to experiment without a lot of infrastructure knowledge
-2. AWS DevOps people without a lot of kubernetes experience
+1. Application developers looking to get an AWS Kubernetes cluster to experiment without a lot of infrastructure knowledge
+2. AWS DevOps people without a lot of Kubernetes experience
 3. Kubernetes DevOps people without a lot of AWS experience
 4. Full-stack, [Full-cycle](https://medium.com/netflix-techblog/full-cycle-developers-at-netflix-a08c31f83249) developers in small or large teams.
 
-## Prerequisites
+## <a name="prerequisities">Prerequisites</a>
 1. [An AWS Account ($25 credit code will be given on day of the workshop)](#create-aws-account)
 2. [aws cli installed and configured to access account](#install-aws-cli)
 3. [kubectl installed](#install-kubectl)
@@ -176,17 +192,19 @@ for command in docker kubectl aws-iam-authenticator eksctl
   done
 ```
 
-## How to make Kubernetes Self-Driving
+## <a name="self-driving-kubernetes">How to make Kubernetes Self-Driving</a>
 
 Amazon EKS works by provisioning (starting) and managing the Kubernetes control plane for you. At a high level, Kubernetes consists of two major components – a cluster of 'worker nodes' that run your containers and the 'control plane' that manages when and where containers are started on your cluster and monitors their status.
 
 Without Amazon EKS, you have to run both the Kubernetes control plane and the cluster of worker nodes yourself. With Amazon EKS, you provision your cluster of worker nodes and AWS handles provisioning, scaling, and managing the Kubernetes control plane in a highly available and secure configuration. This removes a significant operational burden for running Kubernetes and allows you to focus on building your application instead of managing AWS infrastructure.
 
+<img height="500" src="./images/Why_Kubernetes.svg" />
+
 At present the experience of creating a VPC, EKS cluster, and worker nodes using the web console or using the provided Amazon Machine Image (AMI) and AWS CloudFormation scripts leaves you with something that can be difficult to see how to operationalize or provides a frictionless developer experience.
 
 Fortunately, both the Kubernetes Ecosystem and that of AWS are vast and dynamic, and tools have filled this gap.
 
-### `eksctl` - a CLI for Amazon EKS
+### <a name="eksctl">`eksctl` - a CLI for Amazon EKS</a>
 
 While [eksctl](https://github.com/weaveworks/eksctl) started as a simple CLI for EKS, it's clear ambition is to serve both developer use-cases and operational best practices like GitOps. At present, it already does a pretty good job of both.
 
@@ -198,7 +216,7 @@ Meanwhile, Developers want a quick and easy way to spin up a flexible, friendly,
 
 The `eksctl` tool lets us spin up and manage a fully operational cluster with sensible defaults and a broad array of addons and configuration settings. You can choose to pass it flags on the cli (dev mode), or specify detailed configuration via yaml, and checked into git (ops mode). As it improves, it continues to better meet the use cases of both audiences.
 
-### What is an operator?
+### <a name="what-is-an-operator">What is an operator?</a>
 
 From the [operator documentation](https://coreos.com/operators/):
 > An Operator is an application-specific controller that extends the Kubernetes API to create, configure and manage instances of complex stateful applications on behalf of a Kubernetes user. It builds upon the basic Kubernetes resource and controller concepts, but also includes domain or application-specific knowledge to automate common tasks better managed by computers.
@@ -210,7 +228,7 @@ An operator is a combination of custom resource types and the controllers that t
 
 This extensible pattern allows us to collaborate on fully automating all the operation and system administration of even very complex systems. For a list of open source operators and an evaluation of how production ready they are see [Kubernetes Operators](https://kubedex.com/operators/) and the [awesome operators](https://github.com/operator-framework/awesome-operators).
 
-### horizontal pod autoscaling with kube-prometheus (prometheus operator)
+### <a name="hpa">horizontal pod autoscaling with kube-prometheus (prometheus operator)</a>
 
 The [Prometheus Operator](https://github.com/coreos/prometheus-operator) makes the Prometheus configuration Kubernetes native and manages and operates Prometheus and Alertmanager clusters. It is a piece of the puzzle regarding full end-to-end monitoring.
 
@@ -231,7 +249,7 @@ It includes:
 * [Grafana](https://grafana.com/)
 
 
-##### Access the dashboards
+##### <a name="access-dashboards">Access the dashboards</a>
 
 Prometheus, Grafana, and Alertmanager dashboards can be accessed quickly using `kubectl port-forward` after running the quickstart via the commands below. Kubernetes 1.10 or later is required.
 
@@ -262,7 +280,7 @@ $ kubectl --namespace monitoring port-forward svc/alertmanager-main 9093
 Then access via [http://localhost:9093](http://localhost:9093)
 
 
-### node-problem-detector and draino with the cluster autoscaler
+### <a name="draino">node-problem-detector and draino with the cluster autoscaler</a>
 
 [Cluster Autoscaler](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler/) is a standalone program that adjusts the size of a Kubernetes cluster to meet the current needs.
 
@@ -286,7 +304,44 @@ layers. It is running as a Kubernetes Addon enabled by default in GCE clusters, 
 
 Recently, Draino acquired the ability to support all node condition values and status durations for conditions. This allows us to specify `Ready=Unknown,10m` so that nodes that have lost contact with the control plane for prolonged periods can be assumed to have met unrecoverable conditions. Caution should be exercised when deciding how sensitive to make this reaction.
 
+### <a name="let-it-happen-capn">Let it Happen, Cap'n!</a>
+In this repository, there is a script `make-eks.sh` that should set up a functional AWS cluster.
 
-### Cleanup and Notes
+<table><tr><td>:bulb: <b>NOTE:</b> In us-east-1 you are likely to get `UnsupportedAvailabilityZoneException`. If you do, copy the suggested zones and pass `--zones` flag, e.g. `eksctl create cluster --region=us-east-1 --zones=us-east-1a,us-east-1b,us-east-1d`. This may occur in other regions, but less likely. You shouldn't need to use `--zone` flag otherwise.</td></tr></table>
 
-Make sure to list any clusters you made `eksctl get cluster --region=us-east-1` and to delete them: `eksctl delete cluster --region=us-east-1 --name=${CLUSTER_NAME}`. Then go in to your AWS console and insure that there's no lingering stacks in cloudformation, and nat gateways.
+After that is done, you can run the 'init-cluster.sh' script to set up kube-prometheus, draino and all the other stuff mentioned.
+
+### <a name="cleanup">Cleanup and Notes</a>
+
+Make sure to list any clusters you made `eksctl get cluster --region=us-east-1` and to delete them: `eksctl delete cluster --region=us-east-1 --name=${CLUSTER_NAME}`. Then go in to your AWS console and ensure that there's no lingering stacks in CloudFormation, and NAT gateways.
+
+You can also run `cleanup.sh` to do this for you.
+
+### <a name="kubernetes-concepts">Kubernetes Concepts</a>
+
+Under the hood, Kubernetes uses iptables, DNS, and linux kernel namespaces and cgroups (docker containers) to orchestrate containers distributed across one or more physical host machines.
+
+#### Pods
+
+Kubernetes organizes discrete groups of containers into __Pods__. For instance, each BlazeGraph container also needs a sidecar container to run the updater, and another sidecar container to run the wdqs-proxy. These are organized into a single Pod.
+
+#### Replica Set
+A __Replica Set__ specifies a Pod template, and manages how many pod copies there should be. If we want to scale up to five instances of BlazeGraph, or if one Pod crashed and needed to be replaced, the Replica Set would manage this.
+
+#### Deployment
+A __Deployment__ is an object which can own ReplicaSets and update them and their Pods via declarative, server-side rolling updates.
+
+#### StatefulSet
+Like a Deployment, a __StatefulSet__ manages Pods that are based on an identical container spec. Unlike a Deployment, a StatefulSet maintains a sticky identity for each of their Pods. These pods are created from the same spec, but are not interchangeable: each has a persistent identifier that it maintains across any rescheduling.
+
+#### Service
+A Kubernetes __Service__ is an abstraction which defines a logical set of Pods and a policy by which to access them - sometimes called a micro-service. The set of Pods targeted by a Service is (usually) determined by a Label Selector.
+
+#### Ingress
+__Ingress__ manages external access to the services in a cluster, typically HTTP.
+
+#### Volume
+A __Volume__ is just a directory, possibly with some data in it, which is accessible to the Containers in a Pod. It can be shared among multiple containers in the Pod. A volume lives as long as the Pod does, even if a container in the pod restarts.
+
+#### PersistentVolume
+A __PersistentVolume__ (PV) is a piece of storage in the cluster that has been provisioned by an administrator. It is a resource in the cluster just like a node is a cluster resource. PVs have a lifecycle independent of any individual Pod that uses the PV.
