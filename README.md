@@ -360,3 +360,5 @@ Create your own operator:
 - [Kubebuilder](https://github.com/kubernetes-sigs/kubebuilder)
 - [Operator Framework](https://github.com/operator-framework/operator-sdk)
 - [Comparison of Operator Choices](https://admiralty.io/blog/kubernetes-custom-resource-controller-and-operator-development-tools/)
+
+Kubebuilder and Operator Framework SDK use the same underlying libraries ([controller-runtime](https://github.com/kubernetes-sigs/controller-runtime) & [controller-tools](https://github.com/kubernetes-sigs/controller-tools)), but with slightly different layouts.  They're actually working on unifying the two but the skaffolding layout is still a little different at present.
