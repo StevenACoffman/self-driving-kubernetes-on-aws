@@ -151,7 +151,7 @@ chocolatey install eksctl
 ```
 ### <a name="install-docker">Install Docker</a>
 #### MacOS:
-> :bulb: <b>Tip:</b> Avoid _Docker Toolbox_ and _boot2docker_. These are older packages that have been ceded by _Docker for Mac_.
+<table><tr><td> :bulb: <b>Tip:</b> Avoid <i>Docker Toolbox</i> and <i>boot2docker</i>. These are older packages that have been ceded by <i>Docker for Mac</i>.</td></tr></table>
 ```
 brew cask install docker       # Install Docker
 open /Applications/Docker.app  # Start Docker
@@ -169,7 +169,7 @@ sudo apt install docker-compose
 sudo systemctl start docker
 ```
 
-<table><tr><td> :bulb: <b>Tip:</b> If the `docker.io` package isn't available for you, see [Get Docker CE for Ubuntu](https://docs.docker.com/install/linux/docker-ce/ubuntu/) for an alternative.</td></tr></table>
+<table><tr><td> :bulb: <b>Tip:</b> If the `docker.io` package isn't available for you, see <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">Get Docker CE for Ubuntu</a> for an alternative.</td></tr></table>
 
 #### Windows
 
