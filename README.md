@@ -39,7 +39,7 @@ This workshop will provide hands on experience on setting up and running an AWS 
 
 <table><tr><td>:bulb: <b>Hint:</b> Kubernetes and a Service Mesh (Istio or Linkerd2) Service Mesh together provide all but the very last one.</td></tr></table>
 
-You either need a rich execution environment allow your microservice to laser focus on business value, or you need to add so much overhead to your microservice that it winds up not very micro.  
+You either need a rich execution environment allow your microservice to laser focus on business value like [webserver in a single line of code](https://gist.github.com/willurd/5720255), or you need to add so much overhead to your microservice that it winds up not very micro.  
 
 If you can build a straightforward monolithic app and never think about all this asynchronous stuff, go for it! If your system is big enough that you need to refactor into microservices for sanity’s sake, or you need to scale components independently to manage load, or you need to make temporary outages survivable, then microservices with a rich execution environment are a great way to go.
 
@@ -140,22 +140,27 @@ sudo mv /tmp/eksctl /usr/local/bin
 ```
 
 Alternatively, macOS users can use [Homebrew](https://brew.sh):
+
 ```
 brew tap weaveworks/tap
 brew install weaveworks/tap/eksctl
 ```
 
 and Windows users can use [chocolatey](https://chocolatey.org):
+
 ```
 chocolatey install eksctl
 ```
+
 ### <a name="install-docker">Install Docker</a>
 #### MacOS:
 <table><tr><td> :bulb: <b>Tip:</b> Avoid <i>Docker Toolbox</i> and <i>boot2docker</i>. These are older packages that have been ceded by <i>Docker for Mac</i>.</td></tr></table>
+
 ```
 brew cask install docker       # Install Docker
 open /Applications/Docker.app  # Start Docker
 ```
+
 #### Ubuntu
 
 `docker.io` is available from the Ubuntu repositories (as of Xenial).
@@ -227,6 +232,8 @@ From Kubernetes official documentation, [Kube-controller-manager](https://kubern
 An operator is a combination of custom resource types and the controllers that take care of the reconciliation process.
 
 This extensible pattern allows us to collaborate on fully automating all the operation and system administration of even very complex systems. For a list of open source operators and an evaluation of how production ready they are see [Kubernetes Operators](https://kubedex.com/operators/) and the [awesome operators](https://github.com/operator-framework/awesome-operators).
+
+All Operators use the controller pattern, but not all controllers are Operators. It's only an Operator if it's got: controller pattern + API extension + single-app focus.
 
 ### <a name="hpa">horizontal pod autoscaling with kube-prometheus (prometheus operator)</a>
 
