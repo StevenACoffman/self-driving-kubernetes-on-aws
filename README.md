@@ -363,13 +363,14 @@ Catalogs of Existing Operators:
 - [Awesome Operators](https://github.com/operator-framework/awesome-operators)
 
 Create your own operator:
+- [Go - Operator Framework](https://github.com/operator-framework/operator-sdk)
+- [Go - KubeBuilder](https://github.com/kubernetes-sigs/kubebuilder)
+- [Python Operator](https://github.com/zalando-incubator/kopf)
 - [Shell Operator](https://github.com/flant/shell-operator)
 - [JavaScript Operator](https://github.com/dot-i/k8s-operator-node)
-- [KubeBuilder](https://github.com/kubernetes-sigs/kubebuilder)
-- [Operator Framework](https://github.com/operator-framework/operator-sdk)
 - [Comparison of Operator Choices](https://admiralty.io/blog/kubernetes-custom-resource-controller-and-operator-development-tools/)
 
 Kubebuilder and Operator Framework SDK use the same underlying libraries ([controller-runtime](https://github.com/kubernetes-sigs/controller-runtime) & [controller-tools](https://github.com/kubernetes-sigs/controller-tools)), but with slightly different layouts.  They're actually working on unifying the two but the skaffolding layout is still a little different at present.
 
 
-[Understanding Kubernetes Controllers](https://leftasexercise.com/2019/07/08/understanding-kubernetes-controllers-part-i-queues-and-the-core-controller-loop/)
++ [Understanding Kubernetes Controllers](https://leftasexercise.com/2019/07/08/understanding-kubernetes-controllers-part-i-queues-and-the-core-controller-loop/)
