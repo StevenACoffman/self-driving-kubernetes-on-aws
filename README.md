@@ -376,4 +376,5 @@ Kubebuilder and Operator Framework SDK use the same underlying libraries ([contr
 + [Understanding Kubernetes Controllers](https://leftasexercise.com/2019/07/08/understanding-kubernetes-controllers-part-i-queues-and-the-core-controller-loop/)
 
 ### Funny stuff
+Found on imgur (not my work):
 [![Watch the video](./images/talk_about_crds.jpg)](./images/talk_about_crds.mp4)
